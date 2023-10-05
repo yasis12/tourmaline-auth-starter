@@ -20,9 +20,26 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     console.log('/pet POST route');
     console.log(req.body);
+    // req.isAuthenticated() is a function provided by passport
+    // it return either true or false
     console.log('is authenticated?', req.isAuthenticated());
-    console.log('user', req.user);
-    res.sendStatus(200);
+    if(req.isAuthenticated()) {
+        console.log('user', req.user);
+        //add pet to database
+        let queryText = `INSTERT INTO "pets" ("name", "user_id") 
+                        VALUES ($1, $2)`;
+        //! req.user.id is the curretly logged in users id
+        pool.query(queryText, [req.body.name, req.user.id])
+        .then(results => {
+            res.sendStatus(201);
+        }).catch(error => {
+            console.log(error);
+            res.sendStatus(500);
+        });
+    } else {
+        res.sendStatus(401);
+    }
+
     
 });
 
