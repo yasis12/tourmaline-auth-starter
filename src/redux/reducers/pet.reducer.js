@@ -1,5 +1,5 @@
 // step 1: create file for our reducer and export
-const pets = (state = [], action) => {
+const petList = (state = [], action) => {
     switch(action.type) {
         case 'SET_PET_LIST':
             return action.payload;
@@ -8,4 +8,4 @@ const pets = (state = [], action) => {
     }
 };
 
-export default pets;
+export default petList;

@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 function InfoPage() {
+  const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
-  const [petList, setPetList] = useState([]);
+  const petList = useSelector((store) => store.petList);
+  
   const [petName, setPetName] = useState('');
 
   useEffect(() => {
@@ -13,7 +15,9 @@ function InfoPage() {
 
   const getPetList = () => {
     axios.get('/api/pets')
-      .then(response => setPetList(response.data))
+      .then(response => {
+        dispatch({type: 'SET_PET_LIST', payload: response.data})
+      })
       .catch(error => {
         console.error(error);
         alert('Something went wrong.');
